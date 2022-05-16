@@ -17,15 +17,18 @@ export function SubscribeForm() {
   const [notified, setNotified] = useState(false);
 
   const handleEmail = async () => {
+    console.log("Header 19 | submitting email", email);
     setLoading(true);
     if (email !== null) {
       try {
         await addDoc(dbInstance, { email });
         setLoading(false);
         setNotified(true);
+        console.log("Header 26 | email submitted!");
       } catch (error) {
         setLoading(false);
         setNotified(false);
+        console.log("Header 30 | error", error);
       }
 
       console.log("Header 18 | added document!");
@@ -106,7 +109,7 @@ export function SubscribeForm() {
                 <p className="text-base font-medium text-gray-900">
                   Sign up to get notified when it’s ready.
                 </p>
-                <form action="#" method="POST" className="mt-3 sm:flex">
+                <div action="#" method="POST" className="mt-3 sm:flex">
                   <label htmlFor="email" className="sr-only">
                     Email
                   </label>
@@ -116,19 +119,27 @@ export function SubscribeForm() {
                     id="email"
                     className="block w-full py-3 text-base rounded-md placeholder-gray-500 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:flex-1 border-gray-300"
                     placeholder="Enter your email"
-                    onChange={(e) => {}}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                   />
                   <button
                     onClick={handleEmail}
-                    type="submit"
                     className="mt-3 w-full px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:flex-shrink-0 sm:inline-flex sm:items-center sm:w-auto"
                   >
-                    Notify me
+                    {notified ? "Done!" : loading ? "Loading..." : "Notify me!"}
                   </button>
-                </form>
+                </div>
                 <p className="mt-3 text-sm text-gray-500">
                   We will only email you once the book is ready.
                 </p>
+
+                {notified && (
+                  <p className="text-base font-medium text-gray-900 pt-3">
+                    Thank you for your interest! We will email you as soon as
+                    the book is ready
+                  </p>
+                )}
               </div>
             </div>
             <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
@@ -179,11 +190,11 @@ export function SubscribeForm() {
                   className="relative block w-full bg-white rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   <span className="sr-only">Watch our video to learn more</span>
-                  <img
+                  {/* <img
                     className="w-full"
                     src="https://images.unsplash.com/photo-1556740758-90de374c12ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
                     alt=""
-                  />
+                  /> */}
                   <span
                     className="absolute inset-0 w-full h-full flex items-center justify-center"
                     aria-hidden="true"
