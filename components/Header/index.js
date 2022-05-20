@@ -103,7 +103,7 @@ export function SubscribeForm() {
                   <span className="block text-gray-900">
                     Ultimate Guide to Google APIs
                   </span>
-                  <span className="block text-indigo-600 pt-3">
+                  <span className="block text-indigo-600">
                     with React & Node.js
                   </span>
                 </span>
