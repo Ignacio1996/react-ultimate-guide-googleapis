@@ -4,6 +4,8 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { dbInstance } from "../../firebaseConfig";
 import { addDoc } from "firebase/firestore";
 
+import * as ga from "../../lib/ga";
+
 const navigation = [
   { name: "Product", href: "#" },
   { name: "Features", href: "#" },
@@ -22,6 +24,12 @@ export function SubscribeForm() {
     if (email !== null) {
       try {
         await addDoc(dbInstance, { email });
+        ga.event({
+          action: "subscribed",
+          params: {
+            email,
+          },
+        });
         setLoading(false);
         setNotified(true);
         console.log("Header 26 | email submitted!");
