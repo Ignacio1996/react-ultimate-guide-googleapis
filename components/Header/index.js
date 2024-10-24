@@ -124,7 +124,7 @@ export function SubscribeForm() {
                 <span className="block text-sm font-semibold uppercase tracking-wide text-gray-500 sm:text-base lg:text-sm xl:text-base mb-2">
                   {totalSubscribers} / 500 subscribers for E-book
                 </span>
-                <div className="h-2 bg-gray-200 rounded-full mb-3">
+                <div className="h-2 bg-gray-200 rounded-full mb-3 max-w-[700px]">
                   <div
                     className="h-full bg-indigo-600 rounded-full"
                     style={{ width: `${(totalSubscribers / 500) * 100}%` }}
