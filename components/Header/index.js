@@ -121,9 +121,15 @@ export function SubscribeForm() {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1>
-                <span className="block text-sm font-semibold uppercase tracking-wide text-gray-500 sm:text-base lg:text-sm xl:text-base">
+                <span className="block text-sm font-semibold uppercase tracking-wide text-gray-500 sm:text-base lg:text-sm xl:text-base mb-2">
                   {totalSubscribers} / 500 subscribers for E-book
                 </span>
+                <div className="h-2 bg-gray-200 rounded-full mb-3">
+                  <div
+                    className="h-full bg-indigo-600 rounded-full"
+                    style={{ width: `${(totalSubscribers / 500) * 100}%` }}
+                  ></div>
+                </div>
                 <span className="font-bold"></span>
                 {/* add a progress bar from 0 - 500, saying how many subscribers there are and how many are missing on a progress bar */}
 
