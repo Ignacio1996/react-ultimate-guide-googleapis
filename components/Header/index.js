@@ -147,7 +147,7 @@ export function SubscribeForm() {
               </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <p className="text-base font-medium text-gray-900">
-                  Sign up if you're interested in the book!
+                  Sign up if you are interested in the book!
                 </p>
                 <div action="#" method="POST" className="mt-3 sm:flex">
                   <label htmlFor="email" className="sr-only">
