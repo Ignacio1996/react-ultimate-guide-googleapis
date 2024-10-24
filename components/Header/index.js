@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { dbInstance } from "../../firebaseConfig";
-import { addDoc } from "firebase/firestore";
+import { database, dbInstance } from "../../firebaseConfig";
+import { addDoc, getDocs, collection } from "firebase/firestore";
 
 import * as ga from "../../lib/ga";
 
@@ -17,22 +17,42 @@ export function SubscribeForm() {
   const [email, setEmail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notified, setNotified] = useState(false);
+  const [totalSubscribers, setTotalSubscribers] = useState(0);
+
+  useEffect(() => {
+    getTotalNumberOfSubscribers().then((total) => {
+      console.log("Header 15 | total", total);
+      setTotalSubscribers(total);
+    });
+  }, []);
 
   const handleEmail = async () => {
     console.log("Header 19 | submitting email", email);
     setLoading(true);
     if (email !== null) {
       try {
-        await addDoc(dbInstance, { email });
-        ga.event({
-          action: "subscribed",
-          params: {
-            email,
-          },
-        });
-        setLoading(false);
-        setNotified(true);
-        console.log("Header 26 | email submitted!");
+        const querySnapshot = await getDocs(collection(database, "emails"));
+        const emailExists = querySnapshot.docs.some(
+          (doc) => doc.data().email === email
+        );
+
+        if (emailExists) {
+          setLoading(false);
+          setNotified(false);
+          console.log("Header 26 | email already exists!");
+          alert("Email already exists!");
+        } else {
+          await addDoc(dbInstance, { email, date: new Date().toISOString() });
+          ga.event({
+            action: "subscribed",
+            params: {
+              email,
+            },
+          });
+          setLoading(false);
+          setNotified(true);
+          console.log("Header 26 | email submitted!");
+        }
       } catch (error) {
         setLoading(false);
         setNotified(false);
@@ -41,6 +61,11 @@ export function SubscribeForm() {
 
       console.log("Header 18 | added document!");
     }
+  };
+
+  const getTotalNumberOfSubscribers = async () => {
+    const querySnapshot = await getDocs(collection(database, "emails"));
+    return querySnapshot.size;
   };
 
   return (
@@ -97,14 +122,17 @@ export function SubscribeForm() {
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1>
                 <span className="block text-sm font-semibold uppercase tracking-wide text-gray-500 sm:text-base lg:text-sm xl:text-base">
-                  E-book Coming soon
+                  {totalSubscribers} / 500 subscribers for E-book
                 </span>
+                <span className="font-bold"></span>
+                {/* add a progress bar from 0 - 500, saying how many subscribers there are and how many are missing on a progress bar */}
+
                 <span className="mt-1 block text-4xl tracking-tight font-extrabold sm:text-5xl xl:text-6xl">
                   <span className="block text-gray-900">
                     Ultimate Guide to Google APIs
                   </span>
                   <span className="block text-indigo-600">
-                    with React & Node.js
+                    with Javascript, React & Node.js
                   </span>
                 </span>
               </h1>
@@ -113,9 +141,13 @@ export function SubscribeForm() {
                 Spreadsheets Management, Google Calendar, token management, and
                 more!
               </p>
+              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                It took me 4 months to get my first post request to Google, I
+                want to accelerate this process for you in an in-depth guide.
+              </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <p className="text-base font-medium text-gray-900">
-                  Sign up to get notified when it’s ready.
+                  Sign up if you're interested in the book!
                 </p>
                 <div action="#" method="POST" className="mt-3 sm:flex">
                   <label htmlFor="email" className="sr-only">
@@ -139,7 +171,7 @@ export function SubscribeForm() {
                   </button>
                 </div>
                 <p className="mt-3 text-sm text-gray-500">
-                  We will only email you once the book is ready.
+                  I will email you once the book is on the works.
                 </p>
 
                 {notified && (

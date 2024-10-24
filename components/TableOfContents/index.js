@@ -4,7 +4,7 @@ import { CheckIcon } from "@heroicons/react/outline";
 const features = [
   {
     name: "Google Authentication",
-    description: "Safely authenticate your apps with React & Google.",
+    description: "Safely authenticate your apps with Javascript & Google.",
   },
   {
     name: "Token Management",
